@@ -56,7 +56,8 @@ class AuthController extends Controller
         // 인스턴스로 해당되는 User 찾기
         $user = User::where('id', $instance->tokenable_id)->firstOrFail();
         // 로그인 처리
-        Auth::guard('web')->login($user);
+        Auth::login($user);
+        $request->session()->regenerate();
 
         return response()
             ->json(['code' => '1000', 'msg' => 'Hi '.$user->mem_id.', welcome']);
