@@ -39,7 +39,7 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()
-            ->json(['code' => '1000', 'msg' => 'Hi '.$user->mem_id.', welcome', 'api_token' => $token ]);
+            ->json(['code' => '1000', 'msg' => 'Hi '.$user->mem_id.', welcome', 'login_token' => $token ]);
     }
 
     public function setLogin(Request $request)
@@ -47,8 +47,8 @@ class AuthController extends Controller
         $validateResult = $this->authValidate($request, "SET");
         if (!empty($validateResult)) return response()->json($validateResult, 401);
 
-        // login_token에 해당되는 인스턴스 찾기
-        $instance = \Laravel\Sanctum\PersonalAccessToken::findToken($request->api_token);
+        // api_token에 해당되는 인스턴스 찾기
+        $instance = \Laravel\Sanctum\PersonalAccessToken::findToken($request->login_token);
         if (empty($instance)) {
             return response()
                 ->json(['code' => '2004', 'msg' => '회원 인증 실패'], 401);
